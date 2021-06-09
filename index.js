@@ -44,32 +44,29 @@ app.get('/info', (req, res) => {
     res.json(persons)
   })
   
-  // const generateId = () => {
-  //   const maxId = persons.length > 0
-  //     ? Math.max(...persons.map(n => n.id))
-  //     : 0
-  //   return maxId + 1
-  // }
+  const generateId = () => {
+    const maxId = Math.floor(Math.random() * 100000)
+    return maxId 
+  }
   
-  // app.post('/api/persons', (request, response) => {
-  //   const body = request.body
+  app.post('/api/persons', (request, response) => {
+    const body = request.body
   
-  //   if (!body.content) {
-  //     return response.status(400).json({ 
-  //       error: 'content missing' 
-  //     })
-  //   }
+    // if (!body.name) {
+    //   return response.status(400).json({ 
+    //     error: 'content missing' 
+    //   })
+    // }
   
-  //   const person = {
-  //     content: body.content,
-  //     number: body.number,
-  //     id: generateId(),
-  //   }
-  
-  //   persons = persons.concat(person)
-  
-  //   response.json(person)
-  // })
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: generateId(),
+    }
+    persons = persons.concat(person)
+
+    response.json(persons)
+  })
   
   app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
