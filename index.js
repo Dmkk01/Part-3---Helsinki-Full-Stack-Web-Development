@@ -1,7 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
 const app = express()
+const Person = require('./models/person')
 
 app.use(express.static('build'))
 app.use(cors())
@@ -59,7 +61,9 @@ app.get('/info', (req, res) => {
   })
   
   app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Person.find({}).then(people => {
+      res.json(people)
+    })
   })
   
   const generateId = () => {
@@ -93,14 +97,17 @@ app.get('/info', (req, res) => {
   })
   
   app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-  
-    if (person) {
+    Person.findById(request.params.id).then(person => {
       response.json(person)
-    } else {
-      response.status(404).end()
-    }
+    })
+    // const id = Number(request.params.id)
+    // const person = persons.find(person => person.id === id)
+  
+    // if (person) {
+    //   response.json(person)
+    // } else {
+    //   response.status(404).end()
+    // }
   })
   
   app.delete('/api/persons/:id', (request, response) => {
@@ -110,7 +117,7 @@ app.get('/info', (req, res) => {
     response.status(204).end()
   })
   
-  const PORT = process.env.PORT || 3001
+  const PORT = process.env.PORT
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })
