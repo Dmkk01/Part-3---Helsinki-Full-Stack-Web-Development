@@ -73,27 +73,32 @@ app.get('/info', (req, res) => {
   
   app.post('/api/persons', (request, response) => {
     const body = request.body
-    const check = persons.find(per => per.name === body.name)
+    // const check = persons.find(per => per.name === body.name)
 
-    if (check) {
-      return response.status(400).json({ 
-        error: 'name must be unique' 
-      })
-    }
-    if (!body.name || !body.number) {
-      return response.status(400).json({ 
-        error: 'Missing name or number' 
-      })
+    // if (check) {
+    //   return response.status(400).json({ 
+    //     error: 'name must be unique' 
+    //   })
+    // }
+    // if (!body.name || !body.number) {
+    //   return response.status(400).json({ 
+    //     error: 'Missing name or number' 
+    //   })
+    // }
+    if (body.name === undefined || body.number === undefined) {
+      return response.status(400).json({ error: 'content missing' })
     }
   
-    const person = {
+    const person = new Person({
       name: body.name,
-      number: body.number,
-      id: generateId(),
-    }
-    persons = persons.concat(person)
+      number: body.number
+    })
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
+    })
+    // persons = persons.concat(person)
 
-    response.json(person)
+    // response.json(person)
   })
   
   app.get('/api/persons/:id', (request, response) => {
