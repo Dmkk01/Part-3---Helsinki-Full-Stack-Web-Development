@@ -50,18 +50,6 @@ app.get('/info', (req, res) => {
   
   app.post('/api/persons', (request, response, next) => {
     const body = request.body
-    // const check = persons.find(per => per.name === body.name)
-
-    // if (check) {
-    //   return response.status(400).json({ 
-    //     error: 'name must be unique' 
-    //   })
-    // }
-    // if (!body.name || !body.number) {
-    //   return response.status(400).json({ 
-    //     error: 'Missing name or number' 
-    //   })
-    // }
     if (body.name === undefined || body.number === undefined) {
       return response.status(400).json({ error: 'content missing' })
     }
@@ -76,9 +64,6 @@ app.get('/info', (req, res) => {
         response.json(savedPerson)
       })
       .catch(error => next(error))
-    // persons = persons.concat(person)
-
-    // response.json(person)
   })
   
   app.get('/api/persons/:id', (request, response, next) => {
@@ -94,21 +79,9 @@ app.get('/info', (req, res) => {
         console.log("Error in getting the id of a person")
         next(error)
       })
-    // const id = Number(request.params.id)
-    // const person = persons.find(person => person.id === id)
-  
-    // if (person) {
-    //   response.json(person)
-    // } else {
-    //   response.status(404).end()
-    // }
   })
   
   app.delete('/api/persons/:id', (request, response, next) => {
-    // const id = Number(request.params.id)
-    // persons = persons.filter(person => person.id !== id)
-  
-    // response.status(204).end()
     Person.findByIdAndRemove(request.params.id)
       .then(result => {
         response.status(204).end()
