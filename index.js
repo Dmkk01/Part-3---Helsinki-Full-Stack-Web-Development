@@ -67,7 +67,10 @@ app.get('/', (req, res) => {
 
 app.get('/info', (req, res) => {
     let time = new Date()
-    res.send(`<p>Phonebook has ${persons.length} people </p><p>${time}</p>`)
+    Person.find({}).then(people => {
+      res.send(`<p>Phonebook has ${people.length} people </p><p>${time}</p>`)
+    })
+    
   })
   
   app.get('/api/persons', (req, res) => {
@@ -75,11 +78,6 @@ app.get('/info', (req, res) => {
       res.json(people)
     })
   })
-  
-  const generateId = () => {
-    const maxId = Math.floor(Math.random() * 100000)
-    return maxId 
-  }
   
   app.post('/api/persons', (request, response, next) => {
     const body = request.body
